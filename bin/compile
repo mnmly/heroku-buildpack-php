@@ -347,6 +347,7 @@ if [ -n "$BUILDPACK_DEBUG" ]; then
     ls -R /app/vendor/php
 fi
 
+status "Copying conf"
 mkdir -p "conf"
 cp "$basedir/../conf/nginx/base.conf.erb" "conf/nginx.conf.erb"
 cp "$basedir/../conf/php/php-fpm.conf" "/app/vendor/php/etc/php-fpm.conf"
@@ -385,6 +386,7 @@ if [ ! -f "$FRAMEWORK" ]; then
     exit 1
 fi
 
+status "Framework compile"
 "$FRAMEWORK" compile "$BUILD_DIR" "$CACHE_DIR"
 
 install_node_deps "$BUILD_DIR"
@@ -408,6 +410,7 @@ if [ -n "$FRAMEWORK" ] && [ -f "$FRAMEWORK" ]; then
     "$FRAMEWORK" end "$BUILD_DIR" "$CACHE_DIR"
 fi
 
+status "Post compile"
 "$FRAMEWORK" post-compile "$BUILD_DIR" "$CACHE_DIR" || true
 
 status "Vendoring binaries into slug"
@@ -415,6 +418,7 @@ mv /app/vendor/libmcrypt vendor/libmcrypt
 mv /app/vendor/libicu vendor/libicu
 mv /app/vendor/nginx vendor/nginx
 mv /app/vendor/php vendor/php
+
 
 mkdir -p "bin"
 
