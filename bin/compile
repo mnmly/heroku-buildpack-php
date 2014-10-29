@@ -353,6 +353,7 @@ cp "$basedir/../conf/nginx/base.conf.erb" "conf/nginx.conf.erb"
 cp "$basedir/../conf/php/php-fpm.conf" "/app/vendor/php/etc/php-fpm.conf"
 cp "$basedir/../conf/php/php.ini" "/app/vendor/php/etc/php.ini"
 
+status "Config set php_init"
 pear config-set php_ini /app/vendor/php/etc/php.ini &> /dev/null
 
 for conf in $PHP_EXTRA_CONFIG; do
@@ -364,6 +365,7 @@ for include in $PHP_INCLUDES; do
 done
 
 # Detect PHP framework
+status "Detect PHP Framework"
 for f in "$basedir/../frameworks/"*; do
     if "$f" detect "$BUILD_DIR"; then
         FRAMEWORK="$f"
@@ -371,12 +373,14 @@ for f in "$basedir/../frameworks/"*; do
 done
 
 # Fall back to classic mode
+status "Fallback to default Framework"
 if [ -z "$FRAMEWORK" ]; then
     FRAMEWORK="$basedir/../frameworks/default"
 fi
 
 # Try to load the framework from the "frameworks" directory if it's just a
 # simple framework name like "symfony2"
+status "Trying to load framework"
 if [ ! -f "$FRAMEWORK" ] && [ -f "$basedir/../frameworks/$FRAMEWORK" ]; then
     FRAMEWORK="$basedir/../frameworks/$FRAMEWORK"
 fi
