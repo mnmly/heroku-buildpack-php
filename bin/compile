@@ -356,10 +356,12 @@ cp "$basedir/../conf/php/php.ini" "/app/vendor/php/etc/php.ini"
 status "Config set php_init"
 pear config-set php_ini /app/vendor/php/etc/php.ini &> /dev/null
 
+status "copy php extra conf"
 for conf in $PHP_EXTRA_CONFIG; do
     echo "$conf" >> "/app/vendor/php/etc/php.ini"
 done
 
+status "copy php extra includes"
 for include in $PHP_INCLUDES; do
     cp "$BUILD_DIR/$include" "/app/vendor/php/etc/conf.d/"
 done
